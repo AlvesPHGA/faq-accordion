@@ -5,7 +5,10 @@
 }
 
 body {
-   background: url('./images/background-pattern-desktop.svg') no-repeat;
+   background: hsl(275, 100%, 97%)
+      url('./images/background-pattern-desktop.svg') no-repeat center;
+   background-size: cover;
+   font-family: 'Work Sans', sans-serif;
 }
 
 img {
