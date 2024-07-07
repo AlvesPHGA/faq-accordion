@@ -9,7 +9,6 @@ body {
    background: hsl(275, 100%, 97%)
       url('./images/background-pattern-desktop.svg') no-repeat;
    background-size: contain;
-   border: 1px solid red;
    display: flex;
    font-family: 'Work Sans', sans-serif;
    height: 100vh;
