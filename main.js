@@ -32,6 +32,7 @@ class Main extends HTMLElement {
             border-radius: 2.5rem;
             background: white;
             margin: auto;
+            padding: 5rem 2.5rem
          }
       `;
 
