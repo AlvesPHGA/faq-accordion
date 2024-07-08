@@ -20,6 +20,9 @@ class FAQAccordionComponent extends HTMLElement {
       faqBox.classList.add('faq-box');
       faqBox.appendChild(this.title());
 
+      const questions = this.createListAsks();
+      faqBox.appendChild(questions);
+
       return faqBox;
    }
 
@@ -32,18 +35,48 @@ class FAQAccordionComponent extends HTMLElement {
       return title;
    }
 
+   createListAsks() {
+      const list = document.createElement('dl');
+      list.classList.add('list');
+
+      const question = this.questions();
+      list.appendChild(question);
+
+      const answer = this.answers();
+      list.appendChild(answer);
+
+      return list;
+   }
+
+   questions() {
+      const question = document.createElement('dt');
+      question.classList.add('question');
+
+      question.innerHTML = 'What is Frontend Mentor, and how will it help me?';
+
+      return question;
+   }
+
+   answers() {
+      const answer = document.createElement('dd');
+      answer.classList.add('answer');
+
+      answer.innerHTML =
+         "Frontend Mentor offers realistic coding challenges to help developers improve their frontend coding skills with projects in HTML, CSS, and JavaScript. It's suitable for all levels and ideal for portfolio building.";
+
+      return answer;
+   }
+
    styles() {
       const style = document.createElement('style');
 
       style.textContent = `
          .faq-box{
-            border: 1px solid red;
             width: 70vw;
             height: 70vh;
             background: #fff;
             border-radius: 1.25rem;
-            padding: 1.5rem;
-            display: flex;
+            padding: 1.5rem 2rem;
          }
 
          .title{
@@ -53,12 +86,45 @@ class FAQAccordionComponent extends HTMLElement {
             display: flex;
             gap: 1.5rem;
             font-weight: bolder;
+            color: #311437;
          }
 
          .title::before{
             position: relative;
             content: url('../images/icon-star.svg');
             bottom: 5px;
+         }
+
+         .list{
+            margin: 1.5rem 0;
+         }
+
+         .question{
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            width: fit-content;
+            color: #311437;
+         }
+
+         .question::after{
+            position: relative;
+            display: inline-block;
+            top: 7px;
+            left: 1rem;
+            content: url('../images/icon-plus.svg')
+         }
+
+         .question:hover{
+            color: #8738BD;
+         }
+
+         .answer{
+            font-size: 1.25rem;
+            text-align: left;
+            margin: .75rem 0;
+            color: #7F7380;
          }
       `;
 
