@@ -8,7 +8,8 @@ class FAQAccordionComponent extends HTMLElement {
       this.shadow = this.attachShadow({ mode: 'open' });
       this.shadow.appendChild(this.styles());
 
-      this.getQuestionsAnswerFaqs('http://127.0.0.1:5500/faq.json');
+      // this.getQuestionsAnswerFaqs('http://127.0.0.1:5500/faq.json');
+      this.getQuestionsAnswerFaqs('../faq.json');
 
       const faqBox = this.createFAQBox();
       this.shadow.appendChild(faqBox);
