@@ -9,7 +9,7 @@ class FAQAccordionComponent extends HTMLElement {
       this.shadow.appendChild(this.styles());
 
       // this.getQuestionsAnswerFaqs('http://127.0.0.1:5500/faq.json');
-      this.getQuestionsAnswerFaqs('../faq.json');
+      this.getQuestionsAnswerFaqs('http://127.0.0.1:5500/faq.json');
 
       const faqBox = this.createFAQBox();
       this.shadow.appendChild(faqBox);
@@ -43,17 +43,6 @@ class FAQAccordionComponent extends HTMLElement {
       list.classList.add('list');
 
       return list;
-   }
-
-   createQuestion(question) {
-      let dt = document.createElement('dt');
-
-      question?.map((item) => console.log(item));
-
-      dt.classList.add('question');
-      dt.innerHTML = `${question}`;
-
-      return dt;
    }
 
    clickQuestion() {
