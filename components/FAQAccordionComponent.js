@@ -12,6 +12,8 @@ class FAQAccordionComponent extends HTMLElement {
 
       const faqBox = this.createFAQBox();
       this.shadow.appendChild(faqBox);
+
+      this.list = this.shadow.querySelector('dl');
    }
 
    createFAQBox() {
@@ -42,16 +44,6 @@ class FAQAccordionComponent extends HTMLElement {
       return list;
    }
 
-   answers() {
-      const answer = document.createElement('dd');
-      answer.classList.add('answer');
-
-      answer.innerHTML =
-         "Frontend Mentor offers realistic coding challenges to help developers improve their frontend coding skills with projects in HTML, CSS, and JavaScript. It's suitable for all levels and ideal for portfolio building.";
-
-      return answer;
-   }
-
    createQuestion(question) {
       let dt = document.createElement('dt');
 
@@ -63,15 +55,16 @@ class FAQAccordionComponent extends HTMLElement {
       return dt;
    }
 
-   clickQuestion(ev) {
-      const element = ev.currentTarget;
-      const nextElement = element.nextSibling;
-      console.log(nextElement.classList.toggle('show-answer'));
+   clickQuestion() {
+      const element = this.nextSibling;
+
+      this.classList.toggle('__active');
+      element.classList.toggle('__active-answer');
    }
 
    contentFAQs(data) {
       data.map(({ question, answer }) => {
-         const list = this.shadow.querySelector('dl');
+         this.list = this.shadow.querySelector('dl');
 
          const dt = document.createElement('dt');
          dt.classList.add('question');
@@ -83,8 +76,12 @@ class FAQAccordionComponent extends HTMLElement {
          dd.classList.add('answer');
          dd.innerHTML = `${answer}`;
 
-         list.appendChild(dt);
-         list.appendChild(dd);
+         const div = document.createElement('div');
+         div.classList.add('faq-item');
+         div.appendChild(dt);
+         div.appendChild(dd);
+
+         this.list.appendChild(div);
       });
    }
 
@@ -111,7 +108,7 @@ class FAQAccordionComponent extends HTMLElement {
          .title{
             position: relative;
             font-size: 5rem;
-            margin-left: 2rem;
+            margin: 0 0 0 2rem;
             display: flex;
             gap: 1.5rem;
             font-weight: bolder;
@@ -124,8 +121,20 @@ class FAQAccordionComponent extends HTMLElement {
             bottom: 5px;
          }
 
-         .list{
-            margin: 1.5rem 0;
+         .faq-item{
+            position: relative;
+            border-bottom: 1px solid hsl(275, 100%, 97%);
+            height: fit-content;
+            padding: 1.25rem 0;
+         }
+
+         .faq-item:first-child{
+            padding-top: 0;
+         }
+
+         .faq-item:last-child{
+            border: 0px;
+            padding-bottom: 0;
          }
 
          .question{
@@ -134,40 +143,48 @@ class FAQAccordionComponent extends HTMLElement {
             font-size: 1.25rem;
             font-weight: bold;
             cursor: pointer;
-            display: block;
-            width: fit-content;
             color: #311437;
-         }
-
-         .question::after{
-            position: relative;
-            display: inline-block;
-            top: 7px;
-            left: 1rem;
-            content: url('../images/icon-plus.svg')
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
          }
 
          .question:hover{
             color: #8738BD;
          }
 
+         .question::after{
+            content: url('../images/icon-plus.svg')
+         }
+
+         .question.__active::after{
+            content: url('../images/icon-minus.svg')
+         }
+
          .answer{
-            visibility: hidden;
-            position: relative;
-            bottom: 100px;
-            font-size: 1.25rem;
+            display: none;
+            font-size: 1rem;
+            line-height: 1.5rem;
             text-align: left;
             margin: .75rem 0;
             color: #7F7380;
-            height: 0;
-            transition: 3s ease-in-out;
+            }
+
+         .__active-answer{
+            display: block;
+            animation: show-answer .8s forwards
          }
 
-         .show-answer{
-            visibility: visible;
-            bottom: initial;
-            height: initial;
-            transition: 3s ease;
+         @keyframes show-answer{
+            from{
+               opacity: 0;
+               max-height: 0;
+            }
+
+            to{
+               opacity: 1;
+               max-height: 100px;
+            }
          }
       `;
 
