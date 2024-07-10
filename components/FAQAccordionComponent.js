@@ -5,13 +5,13 @@ class FAQAccordionComponent extends HTMLElement {
    }
 
    build() {
-      const shadow = this.attachShadow({ mode: 'open' });
-      shadow.appendChild(this.styles());
+      this.shadow = this.attachShadow({ mode: 'open' });
+      this.shadow.appendChild(this.styles());
+
+      this.getQuestionsAnswerFaqs('http://127.0.0.1:5500/faq.json');
 
       const faqBox = this.createFAQBox();
-      shadow.appendChild(faqBox);
-
-      return shadow;
+      this.shadow.appendChild(faqBox);
    }
 
    createFAQBox() {
@@ -39,22 +39,7 @@ class FAQAccordionComponent extends HTMLElement {
       const list = document.createElement('dl');
       list.classList.add('list');
 
-      const question = this.questions();
-      list.appendChild(question);
-
-      const answer = this.answers();
-      list.appendChild(answer);
-
       return list;
-   }
-
-   questions() {
-      const question = document.createElement('dt');
-      question.classList.add('question');
-
-      question.innerHTML = 'What is Frontend Mentor, and how will it help me?';
-
-      return question;
    }
 
    answers() {
@@ -67,13 +52,57 @@ class FAQAccordionComponent extends HTMLElement {
       return answer;
    }
 
+   createQuestion(question) {
+      let dt = document.createElement('dt');
+
+      question?.map((item) => console.log(item));
+
+      dt.classList.add('question');
+      dt.innerHTML = `${question}`;
+
+      return dt;
+   }
+
+   clickQuestion(ev) {
+      const element = ev.currentTarget;
+      const nextElement = element.nextSibling;
+      console.log(nextElement.classList.toggle('show-answer'));
+   }
+
+   contentFAQs(data) {
+      data.map(({ question, answer }) => {
+         const list = this.shadow.querySelector('dl');
+
+         const dt = document.createElement('dt');
+         dt.classList.add('question');
+         dt.innerHTML = `${question}`;
+
+         dt.addEventListener('click', this.clickQuestion);
+
+         const dd = document.createElement('dd');
+         dd.classList.add('answer');
+         dd.innerHTML = `${answer}`;
+
+         list.appendChild(dt);
+         list.appendChild(dd);
+      });
+   }
+
+   async getQuestionsAnswerFaqs(json) {
+      const res = await fetch(json);
+      const data = await res.json();
+      const faqData = data.faq_questions;
+
+      this.contentFAQs(faqData);
+   }
+
    styles() {
       const style = document.createElement('style');
 
       style.textContent = `
          .faq-box{
-            width: 70vw;
-            height: 70vh;
+            width: 700px;
+            height: fit-content;
             background: #fff;
             border-radius: 1.25rem;
             padding: 1.5rem 2rem;
@@ -100,6 +129,8 @@ class FAQAccordionComponent extends HTMLElement {
          }
 
          .question{
+            position: relative;
+            z-index: 10;
             font-size: 1.25rem;
             font-weight: bold;
             cursor: pointer;
@@ -121,10 +152,22 @@ class FAQAccordionComponent extends HTMLElement {
          }
 
          .answer{
+            visibility: hidden;
+            position: relative;
+            bottom: 100px;
             font-size: 1.25rem;
             text-align: left;
             margin: .75rem 0;
             color: #7F7380;
+            height: 0;
+            transition: 3s ease-in-out;
+         }
+
+         .show-answer{
+            visibility: visible;
+            bottom: initial;
+            height: initial;
+            transition: 3s ease;
          }
       `;
 
